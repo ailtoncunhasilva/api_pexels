@@ -1,6 +1,31 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-class BaseScreen extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+class BaseScreen extends StatefulWidget {
+  @override
+  _BaseScreenState createState() => _BaseScreenState();
+}
+
+class _BaseScreenState extends State<BaseScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    testApi();
+  }
+
+  testApi() async {
+    await http.get(Uri.parse('https://api.pexels.com/v1/curated?per_page=50'),
+        headers: {
+          'Authorization':
+              '563492ad6f91700001000001c3cb4ba8d9cf4d6d8a393bbea7d666da'
+        }).then((value) {
+      print(value.body);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
