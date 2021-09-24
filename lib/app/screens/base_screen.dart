@@ -1,7 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:justa_challenge/app/screens/showdialog_details.dart';
 
 class BaseScreen extends StatefulWidget {
   @override
@@ -46,7 +45,9 @@ class _BaseScreenState extends State<BaseScreen> {
 
   Widget _buildIconSearch() {
     return IconButton(
-      onPressed: () {},
+      onPressed: () {
+        showDialog(context: context, builder: (_) => ShowDialogDetails());
+      },
       icon: Icon(Icons.search),
     );
   }
@@ -64,7 +65,14 @@ class _BaseScreenState extends State<BaseScreen> {
             childAspectRatio: 2 / 3,
           ),
           itemBuilder: (context, builder) {
-            return Container(color: Colors.grey);
+            return Container(
+              color: Colors.grey,
+              child: InkWell(
+                onTap: (){
+                  showDialog(context: context, builder: (_) => ShowDialogDetails());
+                },
+              ),
+            );
           },
         ),
       ),
