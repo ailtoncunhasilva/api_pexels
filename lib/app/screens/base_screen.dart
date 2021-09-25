@@ -14,28 +14,42 @@ class BaseScreen extends StatefulWidget {
 
 class _BaseScreenState extends State<BaseScreen> {
   @override
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         title: Text('@ Justa Challenge'),
         centerTitle: true,
-        actions: [
-          _buildIconSearch(),
-        ],
       ),
       body: Column(
         children: [
+          _buildTextFieldSearch(),
           _buildContent(),
         ],
       ),
     );
   }
 
-  Widget _buildIconSearch() {
-    return IconButton(
-      onPressed: () {},
-      icon: Icon(Icons.search),
+  Widget _buildTextFieldSearch() {
+    return Container(
+      color: Theme.of(context).primaryColor,
+      child: Card(
+        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(48),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 16),
+          child: TextFormField(
+            cursorColor: Theme.of(context).primaryColor,
+            autofocus: true,
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              suffixIcon: Icon(Icons.search, color: Theme.of(context).primaryColor),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
