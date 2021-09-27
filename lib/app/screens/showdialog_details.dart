@@ -22,7 +22,7 @@ class ShowDialogDetails extends StatelessWidget {
                   color: Colors.white,
                 ),
                 image: DecorationImage(
-                  image: NetworkImage(photo?.src?.original ?? ''),
+                  image: NetworkImage(photo?.src?.small ?? ''),
                   fit: BoxFit.cover,
                 ),
               ),
