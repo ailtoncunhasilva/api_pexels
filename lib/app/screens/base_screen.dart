@@ -97,10 +97,7 @@ class _BaseScreenState extends State<BaseScreen> {
 
   Widget _buildSearchContent() {
     return Consumer<ProviderSearchImages>(builder: (_, searchImages, __) {
-      if (searchImages.isLoading == true) {
-        return Center(
-            child: CircularProgressIndicator(color: Colors.lightBlue[900]));
-      } else if (searchImages.isLoading == false &&
+      if (searchImages.isLoading == false &&
           searchImages.photoSearchList.isEmpty) {
         return WidgetError();
       } else {
@@ -134,7 +131,7 @@ class _BaseScreenState extends State<BaseScreen> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           image: DecorationImage(
-            image: NetworkImage(photo.src?.original ?? ''),
+            image: NetworkImage(photo.src?.small ?? ''),
             fit: BoxFit.cover,
           ),
         ),

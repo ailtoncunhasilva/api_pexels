@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:justa_challenge/app/provider/provider_images.dart';
 import 'package:justa_challenge/app/provider/provider_search_images.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +21,15 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Justa Challenge',
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: [
+          Locale('pt', 'BR'),
+        ],
         theme: ThemeData(
           primarySwatch: Colors.blue,
           primaryColor: Colors.lightBlue[900],
