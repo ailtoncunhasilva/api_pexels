@@ -44,8 +44,11 @@ class _BaseScreenState extends State<BaseScreen> {
             cursorColor: Theme.of(context).primaryColor,
             autofocus: true,
             decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(top: 16),
               border: InputBorder.none,
               suffixIcon: Icon(Icons.search, color: Theme.of(context).primaryColor),
+              hintText: 'Pesquisar imagens',
+              hintStyle: TextStyle(color: Colors.grey),
             ),
           ),
         ),

@@ -18,6 +18,9 @@ class ShowDialogDetails extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
                 color: Colors.grey,
+                border: Border.all(
+                  color: Colors.white,
+                ),
                 image: DecorationImage(
                   image: NetworkImage(photo?.src?.original ?? ''),
                   fit: BoxFit.cover,
