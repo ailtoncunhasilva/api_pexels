@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:justa_challenge/app/provider/provider_images.dart';
+import 'package:justa_challenge/app/provider/provider_search_images.dart';
 import 'package:provider/provider.dart';
 
 import 'screens/base_screen.dart';
@@ -11,6 +12,10 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => ProviderImages(),
+          lazy: false,
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ProviderSearchImages(),
           lazy: false,
         ),
       ],

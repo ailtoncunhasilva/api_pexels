@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:justa_challenge/app/models/photo.dart';
 import 'package:justa_challenge/app/provider/provider_images.dart';
+import 'package:justa_challenge/app/provider/provider_search_images.dart';
 import 'package:justa_challenge/app/screens/showdialog_details.dart';
+import 'package:justa_challenge/app/widgets/widget_error.dart';
 import 'package:provider/provider.dart';
 
 class BaseScreen extends StatefulWidget {
-  final Photo? photo;
-
-  BaseScreen({this.photo});
   @override
   _BaseScreenState createState() => _BaseScreenState();
 }
 
 class _BaseScreenState extends State<BaseScreen> {
+  TextEditingController searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,57 +25,103 @@ class _BaseScreenState extends State<BaseScreen> {
       body: Column(
         children: [
           _buildTextFieldSearch(),
-          _buildContent(),
+          (searchController.text.isEmpty)
+              ? _buildRandomContent()
+              : _buildSearchContent(),
         ],
       ),
     );
   }
 
   Widget _buildTextFieldSearch() {
+    final searchContent = Provider.of<ProviderSearchImages>(context);
+
+    final Color primaryColor = Theme.of(context).primaryColor;
+
     return Container(
-      color: Theme.of(context).primaryColor,
+      color: primaryColor,
       child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(48),
         ),
         child: Padding(
           padding: const EdgeInsets.only(left: 16),
           child: TextFormField(
-            cursorColor: Theme.of(context).primaryColor,
-            autofocus: true,
+            controller: searchController,
+            cursorColor: primaryColor,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(top: 16),
               border: InputBorder.none,
-              suffixIcon: Icon(Icons.search, color: Theme.of(context).primaryColor),
+              suffixIcon: Icon(Icons.search, color: primaryColor),
               hintText: 'Pesquisar imagens',
               hintStyle: TextStyle(color: Colors.grey),
+              isDense: false,
             ),
+            onChanged: (value) => searchContent.getSearchImages(value),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildContent() {
-    return Consumer<ProviderImages>(builder: (_, providerImages, __) {
-      return Expanded(
-        child: Container(
-          padding: const EdgeInsets.all(8),
-          child: GridView.builder(
-            itemCount: providerImages.photoList.length,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 8,
-              crossAxisCount: 3,
-              childAspectRatio: 2 / 3,
+  Widget _buildRandomContent() {
+    return Expanded(
+      child: Consumer<ProviderImages>(builder: (_, providerImages, __) {
+        if (providerImages.isLoading == true) {
+          return Center(
+              child: CircularProgressIndicator(color: Colors.lightBlue[900]));
+        } else if (providerImages.isLoading == false &&
+            providerImages.photoList.isEmpty) {
+          return WidgetError();
+        } else {
+          return Container(
+            padding: const EdgeInsets.all(8),
+            child: GridView.builder(
+              itemCount: providerImages.photoList.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisSpacing: 8,
+                mainAxisSpacing: 8,
+                crossAxisCount: 3,
+                childAspectRatio: 2 / 3,
+              ),
+              itemBuilder: (context, index) {
+                return _buildPhoto(providerImages.photoList[index]);
+              },
             ),
-            itemBuilder: (context, index) {
-              return _buildPhoto(providerImages.photoList[index]);
-            },
+          );
+        }
+      }),
+    );
+  }
+
+  Widget _buildSearchContent() {
+    return Consumer<ProviderSearchImages>(builder: (_, searchImages, __) {
+      if (searchImages.isLoading == true) {
+        return Center(
+            child: CircularProgressIndicator(color: Colors.lightBlue[900]));
+      } else if (searchImages.isLoading == false &&
+          searchImages.photoSearchList.isEmpty) {
+        return WidgetError();
+      } else {
+        return Expanded(
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            child: GridView.builder(
+              itemCount: searchImages.photoSearchList.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisSpacing: 8,
+                mainAxisSpacing: 8,
+                crossAxisCount: 3,
+                childAspectRatio: 2 / 3,
+              ),
+              itemBuilder: (context, index) {
+                return _buildPhoto(searchImages.photoSearchList[index]);
+              },
+            ),
           ),
-        ),
-      );
+        );
+      }
     });
   }
 
@@ -85,6 +132,7 @@ class _BaseScreenState extends State<BaseScreen> {
       },
       child: Container(
         decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
           image: DecorationImage(
             image: NetworkImage(photo.src?.original ?? ''),
             fit: BoxFit.cover,
