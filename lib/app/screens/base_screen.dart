@@ -96,13 +96,13 @@ class _BaseScreenState extends State<BaseScreen> {
   }
 
   Widget _buildSearchContent() {
-    return Consumer<ProviderSearchImages>(builder: (_, searchImages, __) {
-      if (searchImages.isLoading == false &&
-          searchImages.photoSearchList.isEmpty) {
-        return WidgetError();
-      } else {
-        return Expanded(
-          child: Container(
+    return Expanded(
+      child: Consumer<ProviderSearchImages>(builder: (_, searchImages, __) {
+        if (searchImages.isLoading == false &&
+            searchImages.photoSearchList.isEmpty) {
+          return WidgetError();
+        } else {
+          return Container(
             padding: const EdgeInsets.all(8),
             child: GridView.builder(
               itemCount: searchImages.photoSearchList.length,
@@ -116,10 +116,10 @@ class _BaseScreenState extends State<BaseScreen> {
                 return _buildPhoto(searchImages.photoSearchList[index]);
               },
             ),
-          ),
-        );
-      }
-    });
+          );
+        }
+      }),
+    );
   }
 
   Widget _buildPhoto(Photo photo) {
@@ -131,7 +131,7 @@ class _BaseScreenState extends State<BaseScreen> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           image: DecorationImage(
-            image: NetworkImage(photo.src?.small ?? ''),
+            image: NetworkImage(photo.src?.large ?? ''),
             fit: BoxFit.cover,
           ),
         ),
